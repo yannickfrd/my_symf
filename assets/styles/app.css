@@ -1,3 +1,15 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+
 body {
-    background-color: lightgray;
+    background-color: #2d3748;
+    color: #DDDDDD;
+}
+
+@layer components {
+    h1 {
+        @apply text-3xl font-bold;
+    }
 }

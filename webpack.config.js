@@ -1,4 +1,9 @@
 const Encore = require('@symfony/webpack-encore');
+const PurgeCssplugin = require('purgecss-webpack-plugin');
+const glob = require('glob-all');
+const path = require('path');
+const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
+require("dotenv").config();
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -55,6 +60,26 @@ Encore
         config.corejs = 3;
     })
 
+    .addPlugin(new BrowserSyncPlugin(
+        {
+            host: "localhost",
+            port: 3000,
+            proxy: process.env.PROXY,
+            files: [
+                {
+                    match: ["templates/*.html.twig"],
+                },
+            ],
+            notify: false,
+        },
+
+        {
+            reload: true,
+        }
+    ))
+
+    .enablePostCssLoader()
+
     // enables Sass/SCSS support
     //.enableSassLoader()
 
@@ -72,4 +97,14 @@ Encore
     //.autoProvidejQuery()
 ;
 
+if (Encore.isProduction()) {
+    Encore.addPlugin(new PurgeCssplugin({
+        paths: glob.sync([
+            path.join(__dirname, 'templates/**/$.html.twig')
+        ]),
+        defaultExtractor: (content) => {
+            return content.match(/[\w-/:]+(?<!:)/g) || [];
+        }
+    }));
+}
 module.exports = Encore.getWebpackConfig();
