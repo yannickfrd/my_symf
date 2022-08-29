@@ -19,6 +19,7 @@ return (new PhpCsFixer\Config())
         '@PSR12' => true,
         '@Symfony' => true,
         'array_syntax' => ['syntax' => 'short'],
+        'no_unused_imports' => true,
     ])
 //    ->setLineEnding(PHP_EOL)
     ->setFinder($finder)

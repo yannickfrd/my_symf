@@ -1,4 +1,4 @@
-.PHONY: install cc help server proxy watch npm-i test-unit test-functional test-end2end test-all test-install create-db-test delete-db-test recreate-db-test update-schema-db-test analyse analyse-fix stan cs
+.PHONY: install cc help server proxy watch npm-i test-unit test-functional test-end2end test-all test-install create-db-test delete-db-test recreate-db-test update-schema-db-test analyse analyse-fix stan cs analyse-fix cs-fix analyse-ci
 
 #include .env
 #include .env.test
@@ -87,20 +87,22 @@ messenger-consume:
 
 stan:
 	@echo -e "$(OBJ_COLOR)Analise du code php :$(NO_COLOR)"
-	vendor\bin\phpstan analyse
+	vendor\bin\phpstan analyse src public --level 9
 
 cs:
 	@echo -e "$(OBJ_COLOR)Analise du code avec cs-fixer :$(NO_COLOR)"
-	vendor\bin\php-cs-fixer src --dry-run --verbose
+	vendor\bin\php-cs-fixer fix src --dry-run --verbose
+
+cs-fix:
+	@echo -e "$(OBJ_COLOR)Analise du code avec cs-fixer :$(NO_COLOR)"
+	vendor\bin\php-cs-fixer fix src --verbose
 
 analyse: stan cs
+
+analyse-fix: stan cs-fix
 
 analyse-ci:
 	@echo -e "$(OBJ_COLOR)Analise du code php :$(NO_COLOR)"
 	./vendor/bin/phpstan analyse
 	@echo -e "$(OBJ_COLOR)Analise du code avec cs-fixer :$(NO_COLOR)"
 	./vendor/bin/php-cs-fixer fix src --dry-run --verbose
-
-analyse-fix: analyse
-	@echo -e "$(OBJ_COLOR)Analyse et correction avec php-cs-fixer :$(NO_COLOR)"
-	vendor\bin\php-cs-fixer fix --verbose
