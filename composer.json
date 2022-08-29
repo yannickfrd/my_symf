@@ -1,4 +1,6 @@
 {
+    "name": "yfrd/my-symf",
+    "description": "Juste for create a Symfony project whith tools.",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
